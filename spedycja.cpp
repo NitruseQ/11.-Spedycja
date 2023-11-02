@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <array>
+#include <string>
 
 struct route {
     std::string first;
@@ -78,12 +79,16 @@ int main(int argc, char* argv[])
 
         whatsNext(routes, connections, distances, {}, startAt, 0);
 
+        std::ofstream outputFile("output.txt");
+
         for (int i = 0; i < routes.size(); i++) {
             std::string between = "";
             for (int j = 0; j < routes[i].between.size(); j++) {
                 between += routes[i].between[j] + " -> ";
             }
-            std::cout << routes[i].first << " -> " << between << routes[i].last << ": " << routes[i].distance << "km" << std::endl;
+            std::string output = routes[i].first + " -> " + between + routes[i].last + ": " + std::to_string(routes[i].distance) + "km" + "\n";
+            std::cout << output;
+            outputFile << output;
         }
 
         for (int i = 0; i < connections.size(); i++) {
@@ -99,11 +104,15 @@ int main(int argc, char* argv[])
                         }
                     }
                     if (!foundRoute) {
-                        std::cout << "Nie znaleziono polaczenia: " << startAt << " -> " << connections[i][0] << std::endl;
+                        std::string output = "Nie znaleziono polaczenia: " + startAt + " -> " + connections[i][0] + "\n";
+                        std::cout << output;
+                        outputFile << output;
                     }
                 }
             }
         }
+
+        outputFile.close();
     }
     else {
         std::cout << "Nie udalo sie otworzyc pliku!" << std::endl;
