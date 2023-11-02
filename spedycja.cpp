@@ -10,7 +10,7 @@ struct route {
     int distance;
 };
 
-void whatsNext(std::vector<route> & routes, std::vector<std::array<std::string, 2>> connections, std::vector<int> distances, std::vector<std::string> beenAt, std::string now, int dist) {
+void whatsNext(std::vector<route> & routes, std::vector<std::array<std::string, 2>> & connections, std::vector<int> & distances, std::vector<std::string> beenAt, std::string now, int dist) {
     beenAt.push_back(now);
     for (int i = 0; i < connections.size(); i++) {
         if (connections[i][0] == now && !(std::find(beenAt.begin(), beenAt.end(), connections[i][1]) != beenAt.end())) {
@@ -49,10 +49,20 @@ void whatsNext(std::vector<route> & routes, std::vector<std::array<std::string, 
     }
 }
 
-int main()
+void inst() {
+    std::cout << "Nalezy podac 2 parametry:" << std::endl;
+    std::cout << "\t1. nazwa pliku z polaczeniami miast (np \"input.txt\"), format pliku:" << std::endl;
+    std::cout << "\t\t[miasto 1-1] [miasto 1-2] [odleglosc 1]" << std::endl;
+    std::cout << "\t\t[miasto 2-1] [miasto 2-2] [odleglosc 2]" << std::endl;
+    std::cout << "\t2. miasto, od ktorego rozpoczniemy trase (np \"Koszalin\")" << std::endl;
+    exit(0);
+}
+
+int main(int argc, char* argv[])
 {
-    std::ifstream file("example.txt");
-    std::string startAt = "Koszalin";
+    if (argc < 2 || argc > 3) inst();
+    std::ifstream file(argv[1]);
+    std::string startAt = argv[2];
     if (file) {
         std::vector<std::array<std::string, 2>> connections;
         std::vector<int> distances;
@@ -66,16 +76,6 @@ int main()
             distances.push_back(dist);
         }
 
-        for (int i = 0; i < connections.size(); i++) {
-            if (connections[i][0] != startAt && !(std::find(allTowns.begin(), allTowns.end(), connections[i][0]) != allTowns.end())) {
-                allTowns.push_back(connections[i][0]);
-            }
-            if (connections[i][1] != startAt && !(std::find(allTowns.begin(), allTowns.end(), connections[i][1]) != allTowns.end())) {
-                allTowns.push_back(connections[i][1]);
-            }
-        }
-
-        std::vector<std::string> beenAt = {};
         whatsNext(routes, connections, distances, {}, startAt, 0);
 
         for (int i = 0; i < routes.size(); i++) {
@@ -83,7 +83,26 @@ int main()
             for (int j = 0; j < routes[i].between.size(); j++) {
                 between += routes[i].between[j] + " -> ";
             }
-            std::cout << routes[i].first << " -> " << between << routes[i].last << ": " << routes[i].distance << std::endl;
+            std::cout << routes[i].first << " -> " << between << routes[i].last << ": " << routes[i].distance << "km" << std::endl;
+        }
+
+        for (int i = 0; i < connections.size(); i++) {
+            bool townInAllTowns = (std::find(allTowns.begin(), allTowns.end(), connections[i][0]) != allTowns.end());
+            for (int k = 0; k <= 1; k++) {
+                if (connections[i][k] != startAt && !townInAllTowns) {
+                    allTowns.push_back(connections[i][k]);
+                    bool foundRoute = false;
+                    for (int j = 0; j < routes.size(); j++) {
+                        if (connections[i][k] == routes[j].last) {
+                            foundRoute = true;
+                            break;
+                        }
+                    }
+                    if (!foundRoute) {
+                        std::cout << "Nie znaleziono polaczenia: " << startAt << " -> " << connections[i][0] << std::endl;
+                    }
+                }
+            }
         }
     }
     else {
