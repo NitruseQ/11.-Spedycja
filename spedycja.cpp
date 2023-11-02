@@ -51,7 +51,7 @@ void whatsNext(std::vector<route> & routes, std::vector<std::array<std::string, 
 
 int main()
 {
-    std::ifstream file("input.txt");
+    std::ifstream file("example.txt");
     std::string startAt = "Koszalin";
     if (file) {
         std::vector<std::array<std::string, 2>> connections;
