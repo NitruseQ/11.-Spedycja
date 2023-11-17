@@ -7,22 +7,21 @@
 /// Czyta parametry podane przez uzytkownika.
 /// @param argc Ilosc parametrow.
 /// @param argv Tablica parametrow.
-/// @return Zwraca zrodlo podanego pliku oraz miasto centrali.
-params readParams(
+/// @return Zwraca zrodlo podanego pliku oraz miasto centrali (first = source, second = center).
+std::pair<std::string, std::string> readParams(
 	int& argc,
 	char *argv[]
 ) {
-	params param;
-	bool startAt = false, source = false;
+	std::pair<std::string, std::string> param;
+	bool center = false, source = false;
 
-	for (int i = 1; i < argc - 1 && !(source && startAt); i++) {
-		if (!strcmp(argv[i], "-c")) {
-			param.startAt = argv[i + 1];
-			startAt = true;
-		} 
+	for (int i = 1; i < argc - 1 && !(source && center); i++) {
 		if (!strcmp(argv[i], "-s")) {
-			param.source = argv[i + 1];
+			param.first = argv[i + 1];
 			source = true;
+		} else if (!strcmp(argv[i], "-c")) {
+			param.second = argv[i + 1];
+			center = true;
 		}
 	}
 

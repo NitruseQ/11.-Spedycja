@@ -1,7 +1,7 @@
 #ifndef FUNCTIONS
 #define FUNCTIONS
 
-params readParams(
+std::pair<std::string, std::string> readParams(
 	int& argc,
 	char* argv[]
 );

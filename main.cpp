@@ -8,8 +8,8 @@
 /// Program do wyszukiwania najkrotszych mozliwych tras do wszystkich podanych miast, zaczynajac od centrali.
 int main(int argc, char* argv[])
 {
-    params param = readParams(argc, argv);
-    std::ifstream file(param.source);
+    std::pair<std::string, std::string> param = readParams(argc, argv); //first = source, second = center
+    std::ifstream file(param.first);
     if (file) {
         //zainicjowanie zmiennych
         std::vector<link> links;
@@ -21,12 +21,12 @@ int main(int argc, char* argv[])
         while (file >> town1 >> town2 >> dist) links.push_back({{ town1, town2 }, dist});
 
         //znalezienie najkrotszych tras
-        whatsNext(routes, links, {}, param.startAt, 0);
+        whatsNext(routes, links, {}, param.second, 0);
 
         //wypisanie ich na ekran
         std::ofstream outputFile("output.txt");
         writeFoundOutput(routes, outputFile);
-        writeNotFoundOutput(param.startAt, links, routes, outputFile);
+        writeNotFoundOutput(param.second, links, routes, outputFile);
         outputFile.close();
     }
     else std::cout << "Nie udalo sie otworzyc pliku!" << std::endl;

@@ -13,14 +13,6 @@ struct route {
     int distance;
 };
 
-/// Przechowuje parametry uzytkownika.
-/// @param source Zrodlo pliku.
-/// @param startAt Miasto centrali.
-struct params {
-    std::string source;
-    std::string startAt;
-};
-
 /// Przechowuje polaczenia miast i dystanse miedzy nimi.
 /// @param cities Dwuelementowy array z nazwami polaczonych miast.
 /// @param distance Dystans polaczenia.
