@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <array>
 #include "struct.h"
 
 /// Wypisuje i zapisuje do pliku znalezione polaczenia miedzy miastami.

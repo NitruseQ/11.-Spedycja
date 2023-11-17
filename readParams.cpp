@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <array>
 #include "struct.h"
 #include "functions.h"
 
@@ -12,20 +13,17 @@ params readParams(
 	char *argv[]
 ) {
 	params param;
-	for (int i = 1; i < argc - 1; i++) {
-		if (!strcmp(argv[i], "-s") && strcmp(argv[i+1], "-c")) {
-			param.source = argv[i+1];
-			break;
-		}
-		if (i + 1 == argc - 1) wrongParams();
-	}
+	bool startAt = false, source = false;
 
-	for (int i = 1; i < argc - 1; i++) {
-		if (!strcmp(argv[i], "-c") && strcmp(argv[i + 1], "-s")) {
-			param.startAt = argv[i+1];
-			break;
+	for (int i = 1; i < argc - 1 && !(source && startAt); i++) {
+		if (!strcmp(argv[i], "-c")) {
+			param.startAt = argv[i + 1];
+			startAt = true;
+		} 
+		if (!strcmp(argv[i], "-s")) {
+			param.source = argv[i + 1];
+			source = true;
 		}
-		if (i + 1 == argc - 1) wrongParams();
 	}
 
 	return param;

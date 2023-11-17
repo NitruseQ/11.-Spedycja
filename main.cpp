@@ -5,32 +5,28 @@
 #include "struct.h"
 #include "functions.h"
 
-//blad
-
 /// Program do wyszukiwania najkrotszych mozliwych tras do wszystkich podanych miast, zaczynajac od centrali.
 int main(int argc, char* argv[])
 {
     params param = readParams(argc, argv);
     std::ifstream file(param.source);
-    std::string startAt = param.startAt;
     if (file) {
-        std::vector<std::array<std::string, 2>> connections;
-        std::vector<int> distances;
-        std::vector<std::string> allTowns;
-        std::string town1, town2;
+        //zainicjowanie zmiennych
+        std::vector<link> links;
         std::vector<route> routes;
+        std::string town1, town2;
         int dist;
 
-        while (file >> town1 >> town2 >> dist) {
-            connections.push_back({ town1, town2 });
-            distances.push_back(dist);
-        }
+        //wczytanie danych z pliku
+        while (file >> town1 >> town2 >> dist) links.push_back({{ town1, town2 }, dist});
 
-        whatsNext(routes, connections, distances, {}, startAt, 0);
+        //znalezienie najkrotszych tras
+        whatsNext(routes, links, {}, param.startAt, 0);
 
+        //wypisanie ich na ekran
         std::ofstream outputFile("output.txt");
         writeFoundOutput(routes, outputFile);
-        writeNotFoundOutput(startAt, connections, routes, allTowns, outputFile);
+        writeNotFoundOutput(param.startAt, links, routes, outputFile);
         outputFile.close();
     }
     else std::cout << "Nie udalo sie otworzyc pliku!" << std::endl;
